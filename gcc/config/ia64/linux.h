@@ -23,6 +23,8 @@ a copy of the GCC Runtime Library Exception along with this program;
 see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 <http://www.gnu.org/licenses/>.  */
 
+#define TARGET_ASM_FILE_END file_end_indicate_exec_stack
+
 /* This is for -profile to use -lc_p instead of -lc.  */
 #undef CC1_SPEC
 #define CC1_SPEC "%{profile:-p} %{G*}"
