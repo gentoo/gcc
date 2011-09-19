@@ -38,6 +38,7 @@ MSGFMT = msgfmt
 EXTRA_DIST = string_literals.cc POTFILES.in $(PACKAGE).pot $(LOCALE_IN)
 
 .po.mo:
+	env --unset=LD_LIBRARY_PATH \
 	$(MSGFMT) -o $@ $<
 
 all-local: all-local-$(USE_NLS)
