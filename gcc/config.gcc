@@ -3352,8 +3352,6 @@ sh-*-elf* | sh[12346l]*-*-elf* | \
 	if test x${enable_incomplete_targets} = xyes ; then
 		tm_defines="$tm_defines SUPPORT_SH1=1 SUPPORT_SH2E=1 SUPPORT_SH4=1 SUPPORT_SH4_SINGLE=1 SUPPORT_SH2A=1 SUPPORT_SH2A_SINGLE=1"
 	fi
-	tm_file="$tm_file ./sysroot-suffix.h"
-	tmake_file="$tmake_file t-sysroot-suffix"
 	;;
 sh-*-rtems*)
 	tmake_file="${tmake_file} sh/t-sh sh/t-rtems"
