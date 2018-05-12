@@ -1015,6 +1015,7 @@ enable_gnu_unique_object
 enable_linker_build_id
 enable_libssp
 enable_default_ssp
+enable_systemtap
 with_long_double_128
 with_long_double_format
 with_gc
@@ -1773,6 +1774,7 @@ Optional Features:
                           compiler will always pass --build-id to linker
   --enable-libssp         enable linking against libssp
   --enable-default-ssp    enable Stack Smashing Protection as default
+  --disable-systemtap     enable systemtap static probe points [default=auto]
   --enable-maintainer-mode
                           enable make rules and dependencies not useful (and
                           sometimes confusing) to the casual installer
@@ -31608,17 +31610,33 @@ fi
 
 # Test for <sys/sdt.h> on the target.
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking sys/sdt.h in the target C library" >&5
+
+# Check whether --enable-systemtap was given.
+if test "${enable_systemtap+set}" = set; then :
+  enableval=$enable_systemtap; enable_systemtap=$enableval
+else
+  enable_systemtap=auto
+fi
+
+
+if test x$enable_systemtap != xno; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking sys/sdt.h in the target C library" >&5
 $as_echo_n "checking sys/sdt.h in the target C library... " >&6; }
-have_sys_sdt_h=no
-if test -f $target_header_dir/sys/sdt.h; then
-  have_sys_sdt_h=yes
+  have_sys_sdt_h=no
+  if test -f $target_header_dir/sys/sdt.h ; then
+    have_sys_sdt_h=yes
 
 $as_echo "#define HAVE_SYS_SDT_H 1" >>confdefs.h
 
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_sys_sdt_h" >&5
+  fi
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_sys_sdt_h" >&5
 $as_echo "$have_sys_sdt_h" >&6; }
+  if test x$enable_systemtap = xyes ; then
+    if test x$have_sys_sdt_h = xno ; then
+      as_fn_error $? "sys/sdt.h was not found" "$LINENO" 5
+    fi
+  fi
+fi
 
 # Check if TFmode long double should be used by default or not.
 # Some glibc targets used DFmode long double, but with glibc 2.4
