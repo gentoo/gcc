@@ -6992,14 +6992,28 @@ AC_SUBST([enable_default_ssp])
 
 # Test for <sys/sdt.h> on the target.
 GCC_TARGET_TEMPLATE([HAVE_SYS_SDT_H])
-AC_MSG_CHECKING(sys/sdt.h in the target C library)
-have_sys_sdt_h=no
-if test -f $target_header_dir/sys/sdt.h; then
-  have_sys_sdt_h=yes
-  AC_DEFINE(HAVE_SYS_SDT_H, 1,
-            [Define if your target C library provides sys/sdt.h])
+
+AC_ARG_ENABLE(systemtap,
+[AS_HELP_STRING([--disable-systemtap],
+  [enable systemtap static probe points [default=auto]])],
+      enable_systemtap=$enableval,
+      enable_systemtap=auto)
+
+if test x$enable_systemtap != xno; then
+  AC_MSG_CHECKING(sys/sdt.h in the target C library)
+  have_sys_sdt_h=no
+  if test -f $target_header_dir/sys/sdt.h ; then
+    have_sys_sdt_h=yes
+    AC_DEFINE(HAVE_SYS_SDT_H, 1,
+              [Define if your target C library provides sys/sdt.h])
+  fi
+  AC_MSG_RESULT($have_sys_sdt_h)
+  if test x$enable_systemtap = xyes ; then
+    if test x$have_sys_sdt_h = xno ; then
+      AC_MSG_ERROR([sys/sdt.h was not found])
+    fi
+  fi
 fi
-AC_MSG_RESULT($have_sys_sdt_h)
 
 # Check if TFmode long double should be used by default or not.
 # Some glibc targets used DFmode long double, but with glibc 2.4
