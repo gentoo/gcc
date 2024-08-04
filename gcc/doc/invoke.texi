@@ -19027,6 +19027,10 @@ for this option.  If your linker does not support this option, the
 header file aspect of @option{--sysroot} still works, but the
 library aspect does not.
 
+On Gentoo Linux, this option can also be set for cross-compilers using the
+@env{ESYSROOT} environmnent variable.  The variable is ignored for native
+compilers.  The command line option takes precedence.
+
 @opindex no-sysroot-suffix
 @item --no-sysroot-suffix
 For some targets, a suffix is added to the root directory specified
@@ -37421,6 +37425,12 @@ linker files, if it cannot find them using @env{GCC_EXEC_PREFIX}.  Linking
 using GCC also uses these directories when searching for ordinary
 libraries for the @option{-l} option (but directories specified with
 @option{-L} come first).
+
+@vindex ESYSROOT
+@item ESYSROOT
+On Gentoo Linux, this variable sets the logical root directory for headers and
+libraries for cross-compilers.  It is ignored for native compilers.  The
+@option{--sysroot} option takes precedence.
 
 @vindex LANG
 @cindex locale definition
