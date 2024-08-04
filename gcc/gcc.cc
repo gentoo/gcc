@@ -5533,6 +5533,16 @@ process_command (unsigned int decoded_options_count,
 	      "BINUTILS", PREFIX_PRIORITY_LAST, 0, 1);
   free (tooldir_prefix);
 
+  if (*cross_compile == '1' && !target_system_root_changed)
+    {
+      const char *esysroot = env.get("ESYSROOT");
+      if (esysroot && esysroot[0] != '\0' && strcmp(esysroot, "/") != 0 && (!target_system_root || strcmp(esysroot, target_system_root) != 0))
+	{
+	  target_system_root = esysroot;
+	  target_system_root_changed = 1;
+	}
+    }
+
 #if defined(TARGET_SYSTEM_ROOT_RELOCATABLE) && !defined(VMS)
   /* If the normal TARGET_SYSTEM_ROOT is inside of $exec_prefix,
      then consider it to relocate with the rest of the GCC installation
