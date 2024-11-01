@@ -1594,6 +1594,15 @@ c_cpp_builtins (cpp_reader *pfile)
     builtin_define_with_int_value ("_FORTIFY_SOURCE", GENTOO_FORTIFY_SOURCE_LEVEL);
 #endif
 
+#ifndef _GENTOO_TIME64_FORCE
+  #define _GENTOO_TIME64_FORCE 0
+#endif
+
+  if (_GENTOO_TIME64_FORCE) {
+    cpp_define (pfile, "_FILE_OFFSET_BITS=64");
+    cpp_define (pfile, "_TIME_BITS=64");
+  }
+
   /* Misc.  */
   if (flag_gnu89_inline)
     cpp_define (pfile, "__GNUC_GNU_INLINE__");
