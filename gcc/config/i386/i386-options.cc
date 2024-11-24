@@ -2858,7 +2858,11 @@ ix86_option_override_internal (bool main_args_p,
      Also -mfpmath=387 is overall a lot more compact (bout 4-5%) than SSE
      codegen.  We may switch to 387 with -ffast-math for size optimized
      functions. */
-  else if (fast_math_flags_set_p (&global_options)
+#ifndef _GENTOO_TIME64_FORCE
+  #define _GENTOO_TIME64_FORCE 0
+#endif
+
+  else if ((fast_math_flags_set_p (&global_options) || _GENTOO_TIME64_FORCE)
 	   && TARGET_SSE2_P (opts->x_ix86_isa_flags))
     opts->x_ix86_fpmath = FPMATH_SSE;
   else
