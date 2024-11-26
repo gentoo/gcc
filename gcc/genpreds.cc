@@ -538,7 +538,7 @@ write_predicate_expr (rtx exp)
       break;
 
     case MATCH_TEST:
-      rtx_reader_ptr->print_c_condition (XSTR (exp, 0));
+      rtx_reader_ptr->print_c_condition (stdout, XSTR (exp, 0));
       break;
 
     default:
