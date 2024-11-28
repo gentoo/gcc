@@ -49,5 +49,8 @@ _fini:
 	.save rp, r33
 	mov	r33 = b0
 	.body
+#ifdef __linux__
+.section .note.GNU-stack; .previous
+#endif
 
 # end of crti.S
