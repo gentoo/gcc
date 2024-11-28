@@ -1425,6 +1425,15 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 #define STACK_CHECK_MAX_VAR_SIZE (STACK_CHECK_MAX_FRAME_SIZE / 100)
 #endif
 
+/* Default value for flag_clash_protector when flag_clash_protector is
+   initialized to -1.  */
+#ifdef DEF_GENTOO_SCP
+#define DEFAULT_FLAG_SCP 1
+#endif
+#ifndef DEFAULT_FLAG_SCP
+#define DEFAULT_FLAG_SCP 0
+#endif
+
 /* By default, the C++ compiler will use function addresses in the
    vtable entries.  Setting this nonzero tells the compiler to use
    function descriptors instead.  The value of this macro says how
