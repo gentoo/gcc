@@ -39,5 +39,8 @@
 	.restore sp
 	mov	r12 = r35
 	br.ret.sptk.many b0
+#ifdef __linux__
+.section .note.GNU-stack; .previous
+#endif
 
 # end of crtn.S
