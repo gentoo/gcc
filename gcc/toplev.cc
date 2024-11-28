@@ -1586,6 +1586,10 @@ process_options (bool no_backend)
 
   /* -fstack-clash-protection is not currently supported on targets
      where the stack grows up.  */
+  if (flag_stack_clash_protection == -1)
+    {
+      flag_stack_clash_protection = DEFAULT_FLAG_SCP;
+    }
   if (flag_stack_clash_protection && !STACK_GROWS_DOWNWARD)
     {
       warning_at (UNKNOWN_LOCATION, 0,
