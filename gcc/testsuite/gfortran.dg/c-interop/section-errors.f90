@@ -1,6 +1,6 @@
 ! { dg-do run }
 ! { dg-additional-sources "section-errors-c.c dump-descriptors.c" }
-! { dg-additional-options "-Wno-error -fcheck=all" }
+! { dg-additional-options "-Wno-error -Wcomplain-wrong-lang -fcheck=all" }
 ! { dg-warning "command-line option '-fcheck=all' is valid for Fortran but not for C" "" { target *-*-* } 0 }
 !
 ! This program tests that the CFI_section function properly detects
