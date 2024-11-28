@@ -2950,7 +2950,7 @@ Common Alias(fstack-check=, specific, no)
 Insert stack checking code into the program.  Same as -fstack-check=specific.
 
 fstack-clash-protection
-Common Var(flag_stack_clash_protection) Optimization
+Common Var(flag_stack_clash_protection) Optimization Init(-1)
 Insert code to probe each page of stack space as it is allocated to protect
 from stack-clash style attacks.
 
