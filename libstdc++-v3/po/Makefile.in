@@ -561,6 +561,7 @@ uninstall-am:
 
 
 .po.mo:
+	env --unset=LD_LIBRARY_PATH \
 	$(MSGFMT) -o $@ $<
 
 all-local: all-local-$(USE_NLS)
