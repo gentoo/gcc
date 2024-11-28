@@ -10864,12 +10864,14 @@ ia64_hpux_reloc_rw_mask (void)
 
 /* For others, relax this so that relocations to local data goes in
    read-only segments, but we still cannot allow global relocations
-   in read-only segments.  */
+   in read-only segments.  Except that use of -rdynamic at link time
+   may make any local data global, so we can't allow local data in
+   read-only segments either.  */
 
 static int
 ia64_reloc_rw_mask (void)
 {
-  return flag_pic ? 3 : 2;
+  return flag_pic ? 3 : 3;
 }
 
 /* Return the section to use for X.  The only special thing we do here
