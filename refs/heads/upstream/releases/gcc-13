@@ -1,0 +1,15 @@
+certificate version 0.1
+pusher Sam James <sam@gentoo.org> 1732767017 +0000
+pushee git+ssh://git.gentoo.org/fork/gcc.git
+nonce 1732767017-dc5e111c6540252e5e19d59e5a47825e615fd37b
+
+0000000000000000000000000000000000000000 ac997cc142bc7ebf220e48feec59c499943fcd66 refs/heads/upstream/releases/gcc-13
+-----BEGIN PGP SIGNATURE-----
+
+iOUEABYKAI0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCZ0ftKV8UgAAAAAAuAChp
+c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
+NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MA8cc2FtQGdlbnRv
+by5vcmcACgkQc4QJ9SDfkZBDEgEA/fkO15Er14X3k5tFTI0kF5gipv5C7844hCF6
+chnbyV0BAP/hz2RJh+ahT9bhuqrFYGo0/XvZoNUJ1e5t01PdaugH
+=zsqM
+-----END PGP SIGNATURE-----
