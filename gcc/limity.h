@@ -3,7 +3,7 @@
 
 #else /* not _GCC_LIMITS_H_ */
 
-#ifdef _GCC_NEXT_LIMITS_H
+#if defined(_GCC_NEXT_LIMITS_H) && __has_include_next(<limits.h>)
 #include_next <limits.h>		/* recurse down to the real one */
 #endif
 
