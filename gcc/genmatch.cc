@@ -3354,6 +3354,7 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
   char local_fail_label[256];
   snprintf (local_fail_label, 256, "next_after_fail%u", ++fail_label_cnt);
   fail_label = local_fail_label;
+  bool needs_label = false;
 
   /* Analyze captures and perform early-outs on the incoming arguments
      that cover cases we cannot handle.  */
@@ -3368,6 +3369,7 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
 		fprintf_indent (f, indent,
 				"if (TREE_SIDE_EFFECTS (_p%d)) goto %s;\n",
 				i, fail_label);
+		needs_label = true;
 		if (verbose >= 1)
 		  warning_at (as_a <expr *> (s->match)->ops[i]->location,
 			      "forcing toplevel operand to have no "
@@ -3383,6 +3385,7 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
 		fprintf_indent (f, indent,
 				"if (TREE_SIDE_EFFECTS (captures[%d])) "
 				"goto %s;\n", i, fail_label);
+		needs_label = true;
 		if (verbose >= 1)
 		  warning_at (cinfo.info[i].c->location,
 			      "forcing captured operand to have no "
@@ -3425,7 +3428,10 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
     }
 
   if (s->kind == simplify::SIMPLIFY)
-    fprintf_indent (f, indent, "if (UNLIKELY (!dbg_cnt (match))) goto %s;\n", fail_label);
+    {
+      fprintf_indent (f, indent, "if (UNLIKELY (!dbg_cnt (match))) goto %s;\n", fail_label);
+      needs_label = true;
+    }
 
   fprintf_indent (f, indent, "if (UNLIKELY (dump_file && (dump_flags & TDF_FOLDING))) "
 	   "fprintf (dump_file, \"%s ",
@@ -3498,9 +3504,12 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
 			      "res_op->resimplify (%s, valueize);\n",
 			      !e->force_leaf ? "lseq" : "NULL");
 	      if (e->force_leaf)
-		fprintf_indent (f, indent,
-				"if (!maybe_push_res_to_seq (res_op, NULL)) "
-				"goto %s;\n", fail_label);
+		{
+		  fprintf_indent (f, indent,
+				  "if (!maybe_push_res_to_seq (res_op, NULL)) "
+				  "goto %s;\n", fail_label);
+		  needs_label = true;
+		}
 	    }
 	}
       else if (result->type == operand::OP_CAPTURE
@@ -3556,9 +3565,12 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
 		  continue;
 		if (cinfo.info[i].result_use_count
 		    > cinfo.info[i].match_use_count)
-		  fprintf_indent (f, indent,
-				  "if (! tree_invariant_p (captures[%d])) "
-				  "goto %s;\n", i, fail_label);
+		  {
+		    fprintf_indent (f, indent,
+				    "if (! tree_invariant_p (captures[%d])) "
+				    "goto %s;\n", i, fail_label);
+		    needs_label = true;
+		  }
 	      }
 	  for (unsigned j = 0; j < e->ops.length (); ++j)
 	    {
@@ -3609,6 +3621,7 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
 		    {
 		      fprintf_indent (f, indent, "if (!_r)\n");
 		      fprintf_indent (f, indent, "  goto %s;\n", fail_label);
+		      needs_label = true;
 		    }
 		}
 	    }
@@ -3649,7 +3662,8 @@ dt_simplify::gen_1 (FILE *f, int indent, bool gimple, operand *result)
     }
   indent -= 2;
   fprintf_indent (f, indent, "}\n");
-  fprintf (f, "%s:;\n", fail_label);
+  if (needs_label)
+    fprintf (f, "%s:;\n", fail_label);
   fail_label = NULL;
 }
 
