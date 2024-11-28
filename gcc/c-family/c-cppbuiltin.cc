@@ -1580,6 +1580,16 @@ c_cpp_builtins (cpp_reader *pfile)
   builtin_define_with_value ("__REGISTER_PREFIX__", REGISTER_PREFIX, 0);
   builtin_define_with_value ("__USER_LABEL_PREFIX__", user_label_prefix, 0);
 
+#if !defined(ACCEL_COMPILER)
+  #ifndef GENTOO_FORTIFY_SOURCE_LEVEL
+    #define GENTOO_FORTIFY_SOURCE_LEVEL 2
+  #endif
+
+  /* F_S enabled by default for optimization levels > 0, except for ASAN: https://github.com/google/sanitizers/issues/247 */
+  if (optimize && ! (flag_sanitize & SANITIZE_ADDRESS))
+    builtin_define_with_int_value ("_FORTIFY_SOURCE", GENTOO_FORTIFY_SOURCE_LEVEL);
+#endif
+
   /* Misc.  */
   if (flag_gnu89_inline)
     cpp_define (pfile, "__GNUC_GNU_INLINE__");
