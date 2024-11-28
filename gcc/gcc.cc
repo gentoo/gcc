@@ -994,6 +994,18 @@ proper position among the other output files.  */
 #define LINK_NOW_SPEC ""
 #endif
 
+/* Default value for flag_cf_protection when flag_cf_protection is
+   initialized to CF_FULL.
+
+   We use a new option (EXTRA_OPTIONS_CF) here to avoid turning
+   this on accidentally for other arches. */
+#ifdef EXTRA_OPTIONS_CF
+#define DEFAULT_FLAG_CF_SPEC " %{!m16:%{!m32:%{!fcf-protection*:%{!fno-cf-protection:-fcf-protection}}}}"
+#endif
+#ifndef DEFAULT_FLAG_CF_SPEC
+#define DEFAULT_FLAG_CF_SPEC ""
+#endif
+
 #ifdef ENABLE_DEFAULT_PIE
 #define PIE_SPEC		"!no-pie"
 #define NO_FPIE1_SPEC		"fno-pie"
@@ -1196,6 +1208,7 @@ static const char *cpp_spec = CPP_SPEC;
 static const char *cc1_spec = CC1_SPEC OS_CC1_SPEC;
 static const char *cc1plus_spec = CC1PLUS_SPEC;
 static const char *link_gcc_c_sequence_spec = LINK_GCC_C_SEQUENCE_SPEC;
+static const char *default_flag_cf_spec = DEFAULT_FLAG_CF_SPEC;
 static const char *link_ssp_spec = LINK_SSP_SPEC;
 static const char *asm_spec = ASM_SPEC;
 static const char *asm_final_spec = ASM_FINAL_SPEC;
@@ -1254,7 +1267,7 @@ static const char *cpp_options =
 "%(cpp_unique_options) %1 %{m*} %{std*&ansi&trigraphs} %{W*&pedantic*} %{w}\
  %{f*} %{g*:%{%:debug-level-gt(0):%{g*}\
  %{!fno-working-directory:-fworking-directory}}} %{O*}\
- %{undef} %{save-temps*:-fpch-preprocess}";
+ %{undef} %{save-temps*:-fpch-preprocess} %(default_flag_cf_spec)";
 
 /* Pass -d* flags, possibly modifying -dumpdir, -dumpbase et al.
 
@@ -1448,9 +1461,9 @@ static const struct compiler default_compilers[] =
       %{save-temps*|traditional-cpp|no-integrated-cpp:%(trad_capable_cpp) \
 	  %(cpp_options) -o %{save-temps*:%b.i} %{!save-temps*:%g.i} \n\
 	    cc1 -fpreprocessed %{save-temps*:%b.i} %{!save-temps*:%g.i} \
-	  %(cc1_options)}\
+	  %(cc1_options)%(default_flag_cf_spec)}\
       %{!save-temps*:%{!traditional-cpp:%{!no-integrated-cpp:\
-	  cc1 %(cpp_unique_options) %(cc1_options)}}}\
+	  cc1 %(cpp_unique_options) %(cc1_options) %(default_flag_cf_spec)}}}\
       %{!fsyntax-only:%(invoke_as)}}}}", 0, 0, 1},
   {"-",
    "%{!E:%e-E or -x required when input is from standard input}\
@@ -1475,7 +1488,7 @@ static const struct compiler default_compilers[] =
 					   %W{o*:--output-pch %*}}%V}}}}}}}", 0, 0, 0},
   {".i", "@cpp-output", 0, 0, 0},
   {"@cpp-output",
-   "%{!M:%{!MM:%{!E:cc1 -fpreprocessed %i %(cc1_options) %{!fsyntax-only:%(invoke_as)}}}}", 0, 0, 0},
+   "%{!M:%{!MM:%{!E:cc1 -fpreprocessed %i %(cc1_options) %(default_flag_cf_spec) %{!fsyntax-only:%(invoke_as)}}}}", 0, 0, 0},
   {".s", "@assembler", 0, 0, 0},
   {"@assembler",
    "%{!M:%{!MM:%{!E:%{!S:as %(asm_debug) %(asm_options) %i %A }}}}", 0, 0, 0},
@@ -1707,6 +1720,7 @@ static struct spec_list static_specs[] =
   INIT_STATIC_SPEC ("cc1_options",		&cc1_options),
   INIT_STATIC_SPEC ("cc1plus",			&cc1plus_spec),
   INIT_STATIC_SPEC ("link_gcc_c_sequence",	&link_gcc_c_sequence_spec),
+  INIT_STATIC_SPEC ("default_flag_cf_spec",     &default_flag_cf_spec),
   INIT_STATIC_SPEC ("link_ssp",			&link_ssp_spec),
   INIT_STATIC_SPEC ("endfile",			&endfile_spec),
   INIT_STATIC_SPEC ("link",			&link_spec),
