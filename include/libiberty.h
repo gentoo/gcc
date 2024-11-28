@@ -652,7 +652,10 @@ extern void *bsearch_r (const void *, const void *,
 /* Like sprintf but provides a pointer to malloc'd storage, which must
    be freed by the caller.  */
 
+/* asprintf may be declared as a macro by glibc with __USE_FORTIFY_LEVEL.  */
+#ifndef asprintf
 extern int asprintf (char **, const char *, ...) ATTRIBUTE_PRINTF_2;
+#endif
 #endif
 
 /* Like asprintf but allocates memory without fail. This works like
