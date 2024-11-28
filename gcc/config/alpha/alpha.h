@@ -94,6 +94,8 @@ along with GCC; see the file COPYING3.  If not see
   while (0)
 #endif
 
+#define CPP_SPEC "%{!no-ieee:-mieee}"
+
 /* Run-time compilation parameters selecting different hardware subsets.  */
 
 /* Which processor to schedule for. The cpu attribute defines a list that

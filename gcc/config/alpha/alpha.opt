@@ -35,7 +35,7 @@ Target RejectNegative Mask(IEEE_CONFORMANT)
 Request IEEE-conformant math library routines (OSF/1).
 
 mieee
-Target RejectNegative Mask(IEEE)
+Target Mask(IEEE)
 Emit IEEE-conformant code, without inexact exceptions.
 
 mieee-with-inexact
