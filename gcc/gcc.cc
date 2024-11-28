@@ -986,6 +986,12 @@ proper position among the other output files.  */
 #define LINK_GCC_C_SEQUENCE_SPEC "%G %{!nolibc:%L %G}"
 #endif
 
+#ifdef ENABLE_DEFAULT_SSP
+#define NO_SSP_SPEC "%{nostdlib|nodefaultlibs|ffreestanding:-fno-stack-protector} "
+#else
+#define NO_SSP_SPEC ""
+#endif
+
 #ifndef LINK_SSP_SPEC
 #ifdef TARGET_LIBC_PROVIDES_SSP
 #define LINK_SSP_SPEC "%{fstack-protector|fstack-protector-all" \
@@ -1282,7 +1288,7 @@ static const char *cc1_options =
  %{-version:--version}\
  %{-help=*:--help=%*}\
  %{!fsyntax-only:%{S:%W{o*}%{!o*:-o %w%b.s}}}\
- %{fsyntax-only:-o %j} %{-param*}\
+ %{fsyntax-only:-o %j} %{-param*} " NO_SSP_SPEC "\
  %{coverage:-fprofile-arcs -ftest-coverage}\
  %{fprofile-arcs|fprofile-generate*|coverage:\
    %{!fprofile-update=single:\
